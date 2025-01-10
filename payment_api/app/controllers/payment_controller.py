@@ -16,6 +16,14 @@ async def get_payments_controller(status: Optional[str] = None, page: int = 1, l
     if not payments:
         raise HTTPException(status_code=404, detail="No payments found")
     
+    for payment in payments:
+        due_amount = payment["due_amount"]
+        discount_percent = payment["discount_percent"]
+        discount_amount = payment['due_amount'] * (discount_percent / 100)
+        tax_amount = payment['due_amount']  * (payment['tax_percent'] / 100)
+        total_due = due_amount - discount_amount + tax_amount
+
+        payment["total_due"] = total_due
     total_pages = (total_payments + limit - 1) // limit  # Calculate total number of pages
     return {"payments": payments, "total_pages": total_pages}
 
