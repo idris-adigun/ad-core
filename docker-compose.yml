@@ -3,8 +3,8 @@ version: "3.9"
 services:
   payment_api:
     build:
-      context: .
-      dockerfile: /payment_api/Dockerfile
+      context: ./payment_api/
+      dockerfile: Dockerfile
     container_name: payment_api
     ports:
       - "8000:8000"
