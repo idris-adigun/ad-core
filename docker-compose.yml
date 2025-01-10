@@ -1,0 +1,25 @@
+version: "3.9"
+
+services:
+  payment_api:
+    build:
+      context: .
+      dockerfile: /payment_api/Dockerfile
+    container_name: payment_api
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mongo
+    volumes:
+      - ./app:/app
+
+  mongo:
+    image: mongo:6.0
+    container_name: mongo_db
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:
