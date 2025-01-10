@@ -66,7 +66,6 @@ export class PaymentListComponent {
         const paymentData = data?.payments as Payment[];
         const totalPages = data?.total_pages;
         this.pageSize = totalPages * this.paginator.pageSize;
-        console.log(this.paginator.length);
         this.payment_data.data = paymentData;
       });
   }
