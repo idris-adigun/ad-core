@@ -42,8 +42,10 @@ async def upload_evidence(payment_id: str, file: UploadFile = File(...)):
     
     if result.matched_count == 0:
         raise HTTPException(status_code=404, detail="Payment not found")
-    
-    return JSONResponse({"file_id": str(file_id), "download_url": download_url})
+    return JSONResponse(
+        status_code=201,
+        content={"file_id": str(file_id), "download_url": download_url}
+    )
     
 
 async def download_evidence(file_name: str):
