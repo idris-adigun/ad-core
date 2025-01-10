@@ -16,4 +16,10 @@ export class PaymentService {
     };
     return this.http.get(`${this.base_url}/payments/get-payments/`, { params });
   }
+
+  delete_payment(payment_id: string) {
+    return this.http.delete(
+      `${this.base_url}/payments/delete-payment/${payment_id}`
+    );
+  }
 }

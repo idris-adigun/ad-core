@@ -8,6 +8,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { UtilService } from '../../../../services/util.service';
 @Component({
   selector: 'app-payment-list',
   imports: [
@@ -42,7 +43,10 @@ export class PaymentListComponent {
     // this.payment_data.paginator = this.paginator;
   }
 
-  constructor(private paymentService: PaymentService) {
+  constructor(
+    private paymentService: PaymentService,
+    private utilService: UtilService
+  ) {
     this.getPayments();
   }
 
@@ -64,7 +68,6 @@ export class PaymentListComponent {
         this.pageSize = totalPages * this.paginator.pageSize;
         console.log(this.paginator.length);
         this.payment_data.data = paymentData;
-        console.log(paymentData);
       });
   }
 
@@ -93,6 +96,13 @@ export class PaymentListComponent {
   }
 
   deletePayment(row: Payment) {
-    console.log(row);
+    let payment_id = row._id;
+    this.paymentService.delete_payment(payment_id).subscribe((data: any) => {
+      if (data.success) {
+        // show Alert
+        this.utilService.show('Payment Deleted Successfully', 'Close');
+        this.getPayments(this.paginator.pageIndex + 1);
+      }
+    });
   }
 }
