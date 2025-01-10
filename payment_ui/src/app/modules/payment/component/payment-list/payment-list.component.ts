@@ -5,6 +5,9 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 @Component({
   selector: 'app-payment-list',
   imports: [
@@ -12,6 +15,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     MatPaginatorModule,
     MatInputModule,
     MatFormFieldModule,
+    MatButtonModule,
+    MatIconModule,
+    MatTooltipModule,
   ],
   providers: [PaymentService],
   templateUrl: './payment-list.component.html',
@@ -27,7 +33,7 @@ export class PaymentListComponent {
     'currency',
     'total_due',
     'payee_payment_status',
-    // 'details',
+    'action',
   ];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -71,6 +77,22 @@ export class PaymentListComponent {
   }
 
   viewDetails(row: Payment) {
+    console.log(row);
+  }
+
+  editDetails(row: Payment) {
+    console.log(row);
+  }
+
+  updatePayment(row: Payment) {
+    console.log(row);
+  }
+
+  uploadEvidence(row: Payment) {
+    console.log(row);
+  }
+
+  deletePayment(row: Payment) {
     console.log(row);
   }
 }
