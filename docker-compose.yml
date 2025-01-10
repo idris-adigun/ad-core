@@ -1,6 +1,14 @@
 version: "3.9"
 
 services:
+  payment_ui:
+    build:
+      context: ./payment_ui
+      dockerfile: Dockerfile
+    container_name: payment_ui
+    ports:
+      - "443:4200"
+
   payment_api:
     build:
       context: ./payment_api/
@@ -10,8 +18,6 @@ services:
       - "8000:8000"
     depends_on:
       - mongo
-    volumes:
-      - ./app:/app
 
   mongo:
     image: mongo:6.0
