@@ -1,0 +1,9 @@
+fastapi 
+uvicorn 
+motor 
+pymongo 
+motor 
+python-multipart
+pydantic 
+pandas 
+pydantic[email]
