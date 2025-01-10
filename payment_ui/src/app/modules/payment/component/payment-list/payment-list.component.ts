@@ -19,6 +19,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 })
 export class PaymentListComponent {
   payment_data = new MatTableDataSource<Payment>([]);
+  pageSize = 0;
   displayedColumns: string[] = [
     'currency',
     'discount_percent',
@@ -29,15 +30,11 @@ export class PaymentListComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   ngAfterViewInit() {
-    this.payment_data.paginator = this.paginator;
+    // this.payment_data.paginator = this.paginator;
   }
 
   constructor(private paymentService: PaymentService) {
-    this.paymentService.get_payments(null, 2, 10).subscribe((data: any) => {
-      const paymentData = data as Payment[];
-      this.payment_data.data = paymentData;
-      console.log(paymentData);
-    });
+    this.getPayments();
   }
 
   applyFilter(event: Event) {
@@ -47,5 +44,26 @@ export class PaymentListComponent {
     if (this.payment_data.paginator) {
       this.payment_data.paginator.firstPage();
     }
+  }
+
+  getPayments(currentPage: number = 1) {
+    this.paymentService
+      .get_payments(null, currentPage, 10)
+      .subscribe((data: any) => {
+        const paymentData = data?.payments as Payment[];
+        const totalPages = data?.total_pages;
+        this.pageSize = totalPages * this.paginator.pageSize;
+        console.log(this.paginator.length);
+        this.payment_data.data = paymentData;
+        console.log(paymentData);
+      });
+  }
+
+  onPageChange(event: any) {
+    const pageIndex = event.pageIndex;
+    if (pageIndex < 0 || pageIndex >= this.paginator.getNumberOfPages()) {
+      return;
+    }
+    this.getPayments(pageIndex);
   }
 }
