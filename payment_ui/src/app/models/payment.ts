@@ -3,6 +3,7 @@ export interface Payment {
   discount_percent: number;
   due_amount: number;
   evidence_url: string;
+  total_due: string;
   payee_added_date_utc: number;
   payee_address_line_1: string;
   payee_address_line_2: string;
