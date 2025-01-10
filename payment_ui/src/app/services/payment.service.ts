@@ -7,7 +7,13 @@ import { Injectable } from '@angular/core';
 export class PaymentService {
   base_url = 'http://localhost:8000';
   constructor(private http: HttpClient) {}
-  get_payments() {
-    return this.http.get(`${this.base_url}/payments/get-payments/`);
+
+  get_payments(status: string | null, page: number, limit: number) {
+    const params: { [param: string]: string } = {
+      status: status || '',
+      page: page.toString(),
+      limit: limit.toString(),
+    };
+    return this.http.get(`${this.base_url}/payments/get-payments/`, { params });
   }
 }
