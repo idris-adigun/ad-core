@@ -21,10 +21,13 @@ export class PaymentListComponent {
   payment_data = new MatTableDataSource<Payment>([]);
   pageSize = 0;
   displayedColumns: string[] = [
+    'payee_first_name',
+    'payee_last_name',
+    'payee_email',
     'currency',
-    'discount_percent',
-    'due_amount',
-    'evidence_url',
+    'total_due',
+    'payee_payment_status',
+    // 'details',
   ];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -65,5 +68,9 @@ export class PaymentListComponent {
       return;
     }
     this.getPayments(pageIndex);
+  }
+
+  viewDetails(row: Payment) {
+    console.log(row);
   }
 }

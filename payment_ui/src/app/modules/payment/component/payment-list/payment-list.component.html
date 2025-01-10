@@ -1,4 +1,4 @@
-<div class="mat-elevation-z8">
+<div>
   <mat-form-field appearance="outline">
     <mat-label>Filter</mat-label>
     <input
@@ -8,36 +8,55 @@
       #input
     />
   </mat-form-field>
-  <table mat-table [dataSource]="payment_data" class="mat-elevation-z8">
-    <!--- Note that these columns can be defined in any order.
-        The actual rendered columns are set as a property on the row definition" -->
+  <table mat-table [dataSource]="payment_data" class="mat-elevation-z8 table">
+    <!-- payee_first_name Column -->
+    <ng-container matColumnDef="payee_first_name">
+      <th mat-header-cell *matHeaderCellDef>First Name</th>
+      <td mat-cell *matCellDef="let element">{{ element.payee_first_name }}</td>
+    </ng-container>
 
-    <!-- Position Column -->
+    <!-- payee_last_name Column -->
+    <ng-container matColumnDef="payee_last_name">
+      <th mat-header-cell *matHeaderCellDef>Last Name</th>
+      <td mat-cell *matCellDef="let element">{{ element.payee_last_name }}</td>
+    </ng-container>
+
+    <!-- Email Column -->
+    <ng-container matColumnDef="payee_email">
+      <th mat-header-cell *matHeaderCellDef>Email</th>
+      <td mat-cell *matCellDef="let element">{{ element.payee_email }}</td>
+    </ng-container>
+
+    <!-- currency Column -->
     <ng-container matColumnDef="currency">
-      <th mat-header-cell *matHeaderCellDef>No.</th>
+      <th mat-header-cell *matHeaderCellDef>Currency</th>
       <td mat-cell *matCellDef="let element">{{ element.currency }}</td>
     </ng-container>
 
-    <!-- Name Column -->
-    <ng-container matColumnDef="discount_percent">
-      <th mat-header-cell *matHeaderCellDef>Name</th>
-      <td mat-cell *matCellDef="let element">{{ element.discount_percent }}</td>
+    <!-- total_due Column -->
+    <ng-container matColumnDef="total_due">
+      <th mat-header-cell *matHeaderCellDef>Total Due</th>
+      <td mat-cell *matCellDef="let element">{{ element.total_due }}</td>
+    </ng-container>
+    <!-- payee_payment_status -->
+    <ng-container matColumnDef="payee_payment_status">
+      <th mat-header-cell *matHeaderCellDef>Payment Status</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.payee_payment_status }}
+      </td>
     </ng-container>
 
-    <!-- Weight Column -->
-    <ng-container matColumnDef="due_amount">
-      <th mat-header-cell *matHeaderCellDef>Weight</th>
-      <td mat-cell *matCellDef="let element">{{ element.due_amount }}</td>
-    </ng-container>
-
-    <!-- Symbol Column -->
-    <ng-container matColumnDef="evidence_url">
-      <th mat-header-cell *matHeaderCellDef>Symbol</th>
-      <td mat-cell *matCellDef="let element">{{ element.evidence_url }}</td>
-    </ng-container>
+    <!-- <ng-container>
+      <th mat-header-cell>Details</th>
+      <td mat-cell>See details</td>
+    </ng-container> -->
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    <tr
+      mat-row
+      *matRowDef="let row; columns: displayedColumns"
+      (click)="viewDetails(row)"
+    ></tr>
   </table>
 
   <mat-paginator
