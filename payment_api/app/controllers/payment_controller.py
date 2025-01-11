@@ -4,11 +4,18 @@ from app.config.database import payments_collection
 from app.models.models import PaymentCreate, PaymentUpdate
 from fastapi import HTTPException, Query
 from bson import ObjectId
-async def get_payments_controller(status: Optional[str] = None, page: int = 1, limit: int = 10):
+
+
+async def get_payments_controller(keyword: Optional[str] = None, page: int = 1, limit: int = 10):
     skip = (page - 1) * limit
     query = {}
-    if status:
-        query["payee_payment_status"] = status
+    if keyword:
+        query = {"$or": [
+            {"payee_first_name": {"$regex": keyword, "$options": "i"}},
+            {"payee_last_name": {"$regex": keyword, "$options": "i"}},
+            {"payee_payment_status": {"$regex": keyword, "$options": "i"}},
+            {"payee_email": {"$regex": keyword, "$options": "i"}}
+        ]}
 
     total_payments = payments_collection.count_documents(query)
     payments =  payments_collection.find(query).skip(skip).limit(limit).to_list(length=limit)
