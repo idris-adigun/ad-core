@@ -124,7 +124,7 @@ export class PaymentListComponent {
         if (data) {
           // show Alert
           this.utilService.show('Database Reset Successfully', 'Close');
-          this.getPayments(this.paginator.pageIndex + 1);
+          this.getPayments(1);
         }
       },
       (error) => {
@@ -139,7 +139,9 @@ export class PaymentListComponent {
         if (data) {
           // show Alert
           this.utilService.show('Database Reset Successfully', 'Close');
-          this.getPayments(this.paginator.pageIndex + 1);
+          this.getPayments(1);
+          // reste the paginator
+          this.paginator.firstPage();
         }
       },
       (error) => {
