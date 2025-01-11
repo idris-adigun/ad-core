@@ -15,12 +15,7 @@
 <div>
   <mat-form-field appearance="outline">
     <mat-label>Filter</mat-label>
-    <input
-      matInput
-      (keyup)="applyFilter($event)"
-      placeholder="Ex. Due"
-      #input
-    />
+    <input matInput (keyup)="applyFilter($event)" placeholder="Filter First Name, Last Name, Status and Email" #input />
   </mat-form-field>
   <table mat-table [dataSource]="payment_data" class="mat-elevation-z8 table">
     <!-- payee_first_name Column -->
@@ -62,12 +57,7 @@
     <ng-container matColumnDef="action">
       <th mat-header-cell *matHeaderCellDef>Action</th>
       <td mat-cell *matCellDef="let element">
-        <button
-          mat-icon-button
-          color="primary"
-          (click)="viewDetails(element)"
-          matTooltip="View Details"
-        >
+        <button mat-icon-button color="primary" (click)="viewDetails(element)" matTooltip="View Details">
           <mat-icon>expand</mat-icon>
         </button>
         <!-- <button
@@ -78,28 +68,13 @@
         >
           <mat-icon>edit</mat-icon>
         </button> -->
-        <button
-          mat-icon-button
-          color="primary"
-          (click)="updatePayment(element)"
-          matTooltip="Update Details"
-        >
+        <button mat-icon-button color="primary" (click)="updatePayment(element)" matTooltip="Update Details">
           <mat-icon>update</mat-icon>
         </button>
-        <button
-          mat-icon-button
-          color="primary"
-          (click)="uploadEvidence(element)"
-          matTooltip="Upload Evidence"
-        >
+        <button mat-icon-button color="primary" (click)="uploadEvidence(element)" matTooltip="Upload Evidence">
           <mat-icon>upload_file</mat-icon>
         </button>
-        <button
-          mat-icon-button
-          color="primary"
-          (click)="deletePayment(element)"
-          matTooltip="Delete Payment"
-        >
+        <button mat-icon-button color="primary" (click)="deletePayment(element)" matTooltip="Delete Payment">
           <mat-icon>delete</mat-icon>
         </button>
       </td>
@@ -114,12 +89,7 @@
     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
 
-  <mat-paginator
-    [pageSizeOptions]="[10]"
-    showFirstLastButtons
-    aria-label="Select page of periodic elements"
-    [length]="pageSize"
-    (page)="onPageChange($event)"
-  >
+  <mat-paginator [pageSizeOptions]="[10]" showFirstLastButtons aria-label="Select page of periodic elements"
+    [length]="pageSize" (page)="onPageChange($event)">
   </mat-paginator>
 </div>
