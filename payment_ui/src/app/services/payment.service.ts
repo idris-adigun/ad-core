@@ -23,6 +23,10 @@ export class PaymentService {
     );
   }
 
+  add_payment(payment: any) {
+    return this.http.post(`${this.base_url}/payments/create-payment/`, payment);
+  }
+
   clearDatabase() {
     return this.http.get(`${this.base_url}/db/clear`);
   }

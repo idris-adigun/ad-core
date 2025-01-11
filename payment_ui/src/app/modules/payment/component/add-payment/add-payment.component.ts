@@ -1,7 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialogContent, MatDialogTitle } from '@angular/material/dialog';
+import {
+  MatDialogActions,
+  MatDialogClose,
+  MatDialogContent,
+  MatDialogTitle,
+} from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
 import { Payment } from '../../../../models/payment';
@@ -22,6 +27,8 @@ import {
 import { LocationService } from '../../../../services/location.service';
 import { MatSelectModule } from '@angular/material/select';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { UtilService } from '../../../../services/util.service';
+import { PaymentService } from '../../../../services/payment.service';
 export interface Countries {
   name: any;
   currency: any;
@@ -43,6 +50,8 @@ export interface Countries {
     MatNativeDateModule,
     MatSelectModule,
     MatProgressBarModule,
+    MatDialogActions,
+    MatDialogClose,
   ],
   providers: [provideNativeDateAdapter()],
   templateUrl: './add-payment.component.html',
@@ -76,7 +85,11 @@ export class AddPaymentComponent {
   });
 
   readonly maxDate = new Date();
-  constructor(private locationService: LocationService) {
+  constructor(
+    private locationService: LocationService,
+    private utilService: UtilService,
+    private paymentService: PaymentService
+  ) {
     this.get_all_locations();
   }
 
@@ -96,5 +109,27 @@ export class AddPaymentComponent {
         this.paymentForm.enable();
       }
     });
+  }
+
+  add_payment() {
+    if (this.paymentForm.invalid) {
+      this.utilService.show('Please fill all the required fields', 'Close');
+      return;
+    }
+    const dueDate = this.paymentForm.get('payee_due_date')?.value;
+    if (dueDate) {
+      const formattedDueDate = new Date(dueDate).toISOString().split('T')[0];
+      this.paymentForm.patchValue({ payee_due_date: formattedDueDate });
+    }
+    this.paymentService.add_payment(this.paymentForm.value).subscribe(
+      (data: any) => {
+        console.log(data);
+        this.utilService.show('Payment added successfully', 'Close');
+        this.paymentForm.reset();
+      },
+      (error) => {
+        this.utilService.show('Error adding payment', 'Close');
+      }
+    );
   }
 }

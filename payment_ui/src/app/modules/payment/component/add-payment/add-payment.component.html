@@ -130,9 +130,16 @@
         <input matInput formControlName="tax_percent" type="number" required />
       </mat-form-field>
 
-      <button mat-button type="submit" [disabled]="!paymentForm.valid">
+      <button
+        mat-button
+        (click)="add_payment()"
+        [disabled]="!paymentForm.valid"
+      >
         Submit
       </button>
     </form>
   </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Close</button>
+  </mat-dialog-actions>
 </div>

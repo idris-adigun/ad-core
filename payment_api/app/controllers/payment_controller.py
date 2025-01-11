@@ -1,3 +1,4 @@
+import datetime
 from typing import Optional
 from app.config.database import payments_collection
 from app.models.models import PaymentCreate, PaymentUpdate
@@ -29,7 +30,11 @@ async def get_payments_controller(status: Optional[str] = None, page: int = 1, l
 
 
 async def create_payment_controller(payment: PaymentCreate):
-    result =  payments_collection.insert_one(payment.dict())
+    payment_data = payment.dict()
+    for key, value in payment_data.items():
+        if isinstance(value, datetime.date):
+            payment_data[key] = datetime.datetime.combine(value, datetime.datetime.min.time())
+    result = payments_collection.insert_one(payment_data)
     if result.inserted_id:
         return {"id": str(result.inserted_id)}
     else:
