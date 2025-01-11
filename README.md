@@ -17,6 +17,18 @@ The following services are defined in the `docker-compose.yml` file:
 
 ## Getting Started
 
+clone repository:
+
+```sh
+git clone https://github.com/idris-adigun/ad-core
+```
+
+Change directory to Adcore:
+
+```sh
+cd ad-core
+```
+
 To start the services, run the following command in the root directory of the project:
 
 ```sh
