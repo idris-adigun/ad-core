@@ -34,6 +34,8 @@ async def get_payments_controller(keyword: Optional[str] = None, page: int = 1, 
         payment["total_due"] = total_due
         if payment.get("payee_due_date"):
             payee_due_date = payment["payee_due_date"]
+            if isinstance(payee_due_date, str):
+                payee_due_date = datetime.datetime.strptime(payee_due_date, "%Y-%m-%d")
             if payee_due_date.date() == datetime.datetime.today().date():
                 payment["payee_payment_status"] = "due_now"
             elif payee_due_date.date() < datetime.datetime.today().date():
