@@ -114,11 +114,10 @@ export class PaymentListComponent {
       if (file) {
         this.paymentService.uploadEvidence(row._id, file).subscribe(
           (response) => {
-            console.log(response);
             this.utilService.show('Evidence uploaded successfully', 'Close');
+            this.getPayments(this.paginator.pageIndex + 1);
           },
           (error) => {
-            console.log(error);
             this.utilService.show(`Error ${error?.message}`, 'Close');
           }
         );
