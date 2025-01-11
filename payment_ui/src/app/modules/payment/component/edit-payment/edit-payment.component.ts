@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import {
+  MAT_DIALOG_DATA,
   MatDialogActions,
   MatDialogClose,
   MatDialogContent,
@@ -57,34 +58,48 @@ import { Countries } from '../add-payment/add-payment.component';
 export class EditPaymentComponent {
   isLoaded = false;
   payment = {} as Payment;
+  data = inject(MAT_DIALOG_DATA);
 
-  payment_status = ['pending'];
+  payment_status = ['pending', 'overdue'];
 
   paymentForm = new FormGroup({
-    payee_first_name: new FormControl('', [Validators.required]),
-    payee_last_name: new FormControl('', [Validators.required]),
-    payee_email: new FormControl('', [Validators.required, Validators.email]),
-    payee_address_line_1: new FormControl('', [Validators.required]),
-    payee_address_line_2: new FormControl(''),
-    payee_country: new FormControl('', [Validators.required]),
-    payee_city: new FormControl('', [Validators.required]),
-    payee_postal_code: new FormControl('', [Validators.required]),
-    currency: new FormControl('', [Validators.required]),
-    discount_percent: new FormControl(0, [Validators.required]),
-    due_amount: new FormControl(0, [Validators.required]),
-    payee_added_date_utc: new FormControl(0, [Validators.required]),
-    payee_due_date: new FormControl('', [Validators.required]),
-    payee_payment_status: new FormControl('', [Validators.required]),
-    payee_phone_number: new FormControl('', [Validators.required]),
-    payee_province_or_state: new FormControl('', [Validators.required]),
-    tax_percent: new FormControl(0, [Validators.required]),
+    payee_first_name: new FormControl({ value: '', disabled: true }),
+    payee_last_name: new FormControl({ value: '', disabled: true }),
+    payee_email: new FormControl({ value: '', disabled: true }),
+    payee_address_line_1: new FormControl({ value: '', disabled: true }),
+    payee_address_line_2: new FormControl({ value: '', disabled: true }),
+    payee_country: new FormControl({ value: '', disabled: true }),
+    payee_city: new FormControl({ value: '', disabled: true }),
+    payee_postal_code: new FormControl({ value: '', disabled: true }),
+    currency: new FormControl({ value: '', disabled: true }),
+    discount_percent: new FormControl({ value: 0, disabled: true }),
+    due_amount: new FormControl({ value: 0, disabled: false }, [
+      Validators.required,
+    ]),
+    payee_due_date: new FormControl({ value: '', disabled: false }, [
+      Validators.required,
+    ]),
+    payee_payment_status: new FormControl({ value: '', disabled: false }, [
+      Validators.required,
+    ]),
+    payee_phone_number: new FormControl({ value: '', disabled: true }),
+    payee_province_or_state: new FormControl({ value: '', disabled: true }),
+    tax_percent: new FormControl({ value: 0, disabled: true }),
   });
 
   readonly maxDate = new Date();
   constructor(
     private utilService: UtilService,
     private paymentService: PaymentService
-  ) {}
+  ) {
+    console.log(this.data);
+    this.payment = this.data;
+    this.paymentForm.patchValue({
+      ...this.payment,
+      payee_postal_code: this.payment.payee_postal_code.toString(),
+      payee_phone_number: this.payment.payee_phone_number.toString(),
+    });
+  }
 
   update_payment() {
     if (this.paymentForm.invalid) {
@@ -96,14 +111,19 @@ export class EditPaymentComponent {
       const formattedDueDate = new Date(dueDate).toISOString().split('T')[0];
       this.paymentForm.patchValue({ payee_due_date: formattedDueDate });
     }
-    this.paymentService.add_payment(this.paymentForm.value).subscribe(
+    this.data['payee_due_date'] = this.paymentForm.get('payee_due_date')?.value;
+    this.data['payee_payment_status'] = this.paymentForm.get(
+      'payee_payment_status'
+    )?.value;
+    this.data['due_amount'] = this.paymentForm.get('due_amount')?.value;
+    this.paymentService.update_payment(this.data).subscribe(
       (data: any) => {
         console.log(data);
-        this.utilService.show('Payment added successfully', 'Close');
+        this.utilService.show('Payment updatesd successfully', 'Close');
         this.paymentForm.reset();
       },
       (error) => {
-        this.utilService.show('Error adding payment', 'Close');
+        this.utilService.show('Error updating payment', 'Close');
       }
     );
   }

@@ -27,6 +27,13 @@ export class PaymentService {
     return this.http.post(`${this.base_url}/payments/create-payment/`, payment);
   }
 
+  update_payment(payment: any) {
+    return this.http.put(
+      `${this.base_url}/payments/update-payment/${payment._id}`,
+      payment
+    );
+  }
+
   clearDatabase() {
     return this.http.get(`${this.base_url}/db/clear`);
   }

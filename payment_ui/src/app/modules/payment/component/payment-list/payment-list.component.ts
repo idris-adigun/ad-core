@@ -12,6 +12,7 @@ import { UtilService } from '../../../../services/util.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ViewDetailsComponent } from '../view-details/view-details.component';
 import { AddPaymentComponent } from '../add-payment/add-payment.component';
+import { EditPaymentComponent } from '../edit-payment/edit-payment.component';
 @Component({
   selector: 'app-payment-list',
   imports: [
@@ -98,12 +99,10 @@ export class PaymentListComponent {
     });
   }
 
-  editDetails(row: Payment) {
-    console.log(row);
-  }
-
   updatePayment(row: Payment) {
-    console.log(row);
+    this.dialog.open(EditPaymentComponent, {
+      data: row,
+    });
   }
 
   uploadEvidence(row: Payment) {

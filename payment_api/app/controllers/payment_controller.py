@@ -42,13 +42,13 @@ async def create_payment_controller(payment: PaymentCreate):
 
 
 async def update_payment_controller(payment_id: str, payment_update: PaymentUpdate):
-    if payment_update.status == "completed" and not payment_update.evidence_file:
-        raise HTTPException(400, "Evidence file required for 'completed' status")
-    result =  payments_collection.update_one({"_id": payment_id}, {"$set": payment_update.dict()})
-    if result.modified_count > 0:
-        return {"success": True}
-    else:
-        raise HTTPException(status_code=404, detail="Payment not found or no changes made")
+    payment_data = payment_update.dict(exclude_unset=True)
+    if payment_data.get("payee_due_date"):
+        payment_data["payee_due_date"] = datetime.datetime.combine(payment_data["payee_due_date"], datetime.datetime.min.time())
+    result = payments_collection.update_one({"_id": ObjectId(payment_id)}, {"$set": payment_data})
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Payment not found")
+    return {"success": True}
 
 
 async def delete_payment_controller(payment_id: str):
