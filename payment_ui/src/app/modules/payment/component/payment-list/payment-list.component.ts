@@ -92,7 +92,10 @@ export class PaymentListComponent {
   }
 
   addPayment() {
-    this.dialog.open(AddPaymentComponent);
+    this.dialog.open(AddPaymentComponent, {
+      width: '90%',
+      maxWidth: '1000px',
+    });
   }
 
   editDetails(row: Payment) {

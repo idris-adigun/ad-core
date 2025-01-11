@@ -5,6 +5,7 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideHttpClient } from '@angular/common/http';
+import { MatNativeDateModule } from '@angular/material/core';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
@@ -12,5 +13,6 @@ export const appConfig: ApplicationConfig = {
     MatSnackBarModule,
     provideAnimationsAsync(),
     provideHttpClient(),
+    MatNativeDateModule,
   ],
 };
