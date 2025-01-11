@@ -34,4 +34,19 @@ export class PaymentService {
   resetDatabase() {
     return this.http.get(`${this.base_url}/db/initialize`);
   }
+
+  uploadEvidence(payment_id: string, evidence: any) {
+    const formData = new FormData();
+    formData.append('file', evidence);
+    return this.http.post(
+      `${this.base_url}/evidence/upload/${payment_id}`,
+      formData
+    );
+  }
+
+  downloadEvidence(filename: string) {
+    return this.http.get(`${this.base_url}/evidence/download/${filename}`, {
+      responseType: 'blob',
+    });
+  }
 }

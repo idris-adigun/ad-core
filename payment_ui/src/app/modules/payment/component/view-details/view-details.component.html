@@ -38,9 +38,14 @@
         <ng-container
           *ngIf="payment?.evidence_url?.length > 0; else noEvidence"
         >
-          <a [href]="payment?.evidence_url" target="_blank"
-            >Download Evidence</a
+          <button
+            mat-icon-button
+            color="primary"
+            (click)="downloadEvidence(payment?.evidence_url)"
+            matTooltip="Delete Payment"
           >
+            <mat-icon>download</mat-icon>
+          </button>
         </ng-container>
         <ng-template #noEvidence>No Evidence provided</ng-template>
       </div>

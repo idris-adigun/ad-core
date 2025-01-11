@@ -62,7 +62,7 @@ export class AddPaymentComponent {
   payment = {} as Payment;
   countries = [] as Countries[];
 
-  payment_status = ['pending', 'overdue'];
+  payment_status = ['pending'];
 
   paymentForm = new FormGroup({
     payee_first_name: new FormControl('', [Validators.required]),

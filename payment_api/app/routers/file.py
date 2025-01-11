@@ -8,7 +8,7 @@ from app.controllers import file_controller
 
 router = APIRouter()
 
-@router.post("/upload/")
+@router.post("/upload/{payment_id}")
 async def upload_evidence(payment_id: str, file: UploadFile = File(...)):
     response = await file_controller.upload_evidence(payment_id, file)
     return response

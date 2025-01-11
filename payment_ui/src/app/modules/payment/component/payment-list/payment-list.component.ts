@@ -107,6 +107,24 @@ export class PaymentListComponent {
   }
 
   uploadEvidence(row: Payment) {
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.onchange = (event: any) => {
+      const file = event.target.files[0];
+      if (file) {
+        this.paymentService.uploadEvidence(row._id, file).subscribe(
+          (response) => {
+            console.log(response);
+            this.utilService.show('Evidence uploaded successfully', 'Close');
+          },
+          (error) => {
+            console.log(error);
+            this.utilService.show(`Error ${error?.message}`, 'Close');
+          }
+        );
+      }
+    };
+    fileInput.click();
     console.log(row);
   }
 
