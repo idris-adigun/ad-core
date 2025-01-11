@@ -33,6 +33,7 @@ export class PaymentListComponent {
   dialog = inject(MatDialog);
   pageSize = 0;
   filterTimeout: any;
+  keyword = '';
   displayedColumns: string[] = [
     'payee_first_name',
     'payee_last_name',
@@ -42,7 +43,6 @@ export class PaymentListComponent {
     'payee_payment_status',
     'action',
   ];
-  keyword = '';
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -62,7 +62,11 @@ export class PaymentListComponent {
     // this.payment_data.filter = filterValue.trim().toLowerCase();
     clearTimeout(this.filterTimeout);
     this.filterTimeout = setTimeout(() => {
-      this.getPayments(filterValue, 1);
+      if (this.keyword === filterValue) {
+        return;
+      }
+      this.keyword = filterValue;
+      this.getPayments(1);
     }, 1000);
 
     if (this.payment_data.paginator) {
@@ -70,8 +74,8 @@ export class PaymentListComponent {
     }
   }
 
-  getPayments(keyword: string = '', currentPage: number = 1) {
-    this.paymentService.get_payments(keyword, currentPage, 10).subscribe(
+  getPayments(currentPage: number = 1) {
+    this.paymentService.get_payments(this.keyword, currentPage, 10).subscribe(
       (data: any) => {
         const paymentData = data?.payments as Payment[];
         const totalPages = data?.total_pages;
@@ -93,21 +97,29 @@ export class PaymentListComponent {
   }
 
   viewDetails(row: Payment) {
-    this.dialog.open(ViewDetailsComponent, {
+    const dialogRef = this.dialog.open(ViewDetailsComponent, {
       data: row,
     });
   }
 
   addPayment() {
-    this.dialog.open(AddPaymentComponent, {
+    const dialogRef = this.dialog.open(AddPaymentComponent, {
       width: '90%',
       maxWidth: '1000px',
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      this.getPayments(this.paginator.pageIndex + 1);
     });
   }
 
   updatePayment(row: Payment) {
-    this.dialog.open(EditPaymentComponent, {
+    const dialogRef = this.dialog.open(EditPaymentComponent, {
       data: row,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      this.getPayments(this.paginator.pageIndex + 1);
     });
   }
 
@@ -120,7 +132,7 @@ export class PaymentListComponent {
         this.paymentService.uploadEvidence(row._id, file).subscribe(
           (response) => {
             this.utilService.show('Evidence uploaded successfully', 'Close');
-            this.getPayments('', this.paginator.pageIndex + 1);
+            this.getPayments(this.paginator.pageIndex + 1);
           },
           (error) => {
             this.utilService.show(`Error ${error?.message}`, 'Close');
@@ -139,7 +151,7 @@ export class PaymentListComponent {
         if (data.success) {
           // show Alert
           this.utilService.show('Payment Deleted Successfully', 'Close');
-          this.getPayments('', this.paginator.pageIndex + 1);
+          this.getPayments(this.paginator.pageIndex + 1);
         }
       },
       (error) => {
@@ -154,7 +166,7 @@ export class PaymentListComponent {
         if (data) {
           // show Alert
           this.utilService.show('Database Reset Successfully', 'Close');
-          this.getPayments('', 1);
+          this.getPayments(1);
         }
       },
       (error) => {
@@ -169,7 +181,7 @@ export class PaymentListComponent {
         if (data) {
           // show Alert
           this.utilService.show('Database Reset Successfully', 'Close');
-          this.getPayments('', 1);
+          this.getPayments(1);
         }
       },
       (error) => {

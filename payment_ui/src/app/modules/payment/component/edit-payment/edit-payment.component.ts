@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, Inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import {
   MAT_DIALOG_DATA,
@@ -9,6 +9,7 @@ import {
   MatDialogTitle,
 } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatDialogRef } from '@angular/material/dialog';
 import { MatListModule } from '@angular/material/list';
 import { Payment } from '../../../../models/payment';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -89,8 +90,9 @@ export class EditPaymentComponent {
 
   readonly maxDate = new Date();
   constructor(
-    private utilService: UtilService,
-    private paymentService: PaymentService
+    private paymentService: PaymentService,
+    private dialogRef: MatDialogRef<EditPaymentComponent>,
+    private utilService: UtilService
   ) {
     console.log(this.data);
     this.payment = this.data;
@@ -119,8 +121,8 @@ export class EditPaymentComponent {
     this.paymentService.update_payment(this.data).subscribe(
       (data: any) => {
         console.log(data);
-        this.utilService.show('Payment updatesd successfully', 'Close');
-        this.paymentForm.reset();
+        this.utilService.show('Payment updated successfully', 'Close');
+        this.dialogRef.close();
       },
       (error) => {
         this.utilService.show('Error updating payment', 'Close');

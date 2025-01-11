@@ -32,7 +32,7 @@ async def get_payments_controller(keyword: Optional[str] = None, page: int = 1, 
         total_due = due_amount - discount_amount + tax_amount
 
         payment["total_due"] = total_due
-        if payment.get("payee_due_date"):
+        if payment.get("payee_due_date") and payment.get("payee_payment_status") != "completed":
             payee_due_date = payment["payee_due_date"]
             if isinstance(payee_due_date, str):
                 payee_due_date = datetime.datetime.strptime(payee_due_date, "%Y-%m-%d")

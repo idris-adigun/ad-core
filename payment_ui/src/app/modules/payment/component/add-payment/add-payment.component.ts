@@ -5,6 +5,7 @@ import {
   MatDialogActions,
   MatDialogClose,
   MatDialogContent,
+  MatDialogRef,
   MatDialogTitle,
 } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
@@ -88,7 +89,8 @@ export class AddPaymentComponent {
   constructor(
     private locationService: LocationService,
     private utilService: UtilService,
-    private paymentService: PaymentService
+    private paymentService: PaymentService,
+    private dialogRef: MatDialogRef<AddPaymentComponent>
   ) {
     this.get_all_locations();
   }
@@ -126,6 +128,8 @@ export class AddPaymentComponent {
         console.log(data);
         this.utilService.show('Payment added successfully', 'Close');
         this.paymentForm.reset();
+
+        this.dialogRef.close();
       },
       (error) => {
         this.utilService.show('Error adding payment', 'Close');
