@@ -24,3 +24,16 @@ table {
 .demo-row-is-clicked {
   font-weight: bold;
 }
+.header {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  justify-content: space-between;
+}
+.db-actions {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  justify-content: space-between;
+}

@@ -22,4 +22,12 @@ export class PaymentService {
       `${this.base_url}/payments/delete-payment/${payment_id}`
     );
   }
+
+  clearDatabase() {
+    return this.http.get(`${this.base_url}/db/clear`);
+  }
+
+  resetDatabase() {
+    return this.http.get(`${this.base_url}/db/initialize`);
+  }
 }

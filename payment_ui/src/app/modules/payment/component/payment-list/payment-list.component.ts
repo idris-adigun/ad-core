@@ -9,12 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { UtilService } from '../../../../services/util.service';
-import {
-  MatDialog,
-  MAT_DIALOG_DATA,
-  MatDialogTitle,
-  MatDialogContent,
-} from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { ViewDetailsComponent } from '../view-details/view-details.component';
 @Component({
   selector: 'app-payment-list',
@@ -68,14 +63,17 @@ export class PaymentListComponent {
   }
 
   getPayments(currentPage: number = 1) {
-    this.paymentService
-      .get_payments(null, currentPage, 10)
-      .subscribe((data: any) => {
+    this.paymentService.get_payments(null, currentPage, 10).subscribe(
+      (data: any) => {
         const paymentData = data?.payments as Payment[];
         const totalPages = data?.total_pages;
         this.pageSize = totalPages * this.paginator.pageSize;
         this.payment_data.data = paymentData;
-      });
+      },
+      (error) => {
+        this.payment_data.data = [];
+      }
+    );
   }
 
   onPageChange(event: any) {
@@ -116,6 +114,36 @@ export class PaymentListComponent {
       },
       (error) => {
         this.utilService.show('Error Deleting Payment', 'Close');
+      }
+    );
+  }
+
+  resetDatabase() {
+    this.paymentService.resetDatabase().subscribe(
+      (data: any) => {
+        if (data) {
+          // show Alert
+          this.utilService.show('Database Reset Successfully', 'Close');
+          this.getPayments(this.paginator.pageIndex + 1);
+        }
+      },
+      (error) => {
+        this.utilService.show('Error Resetting Database', 'Close');
+      }
+    );
+  }
+
+  clearDatabase() {
+    this.paymentService.clearDatabase().subscribe(
+      (data: any) => {
+        if (data) {
+          // show Alert
+          this.utilService.show('Database Reset Successfully', 'Close');
+          this.getPayments(this.paginator.pageIndex + 1);
+        }
+      },
+      (error) => {
+        this.utilService.show('Error Resetting Database', 'Close');
       }
     );
   }
