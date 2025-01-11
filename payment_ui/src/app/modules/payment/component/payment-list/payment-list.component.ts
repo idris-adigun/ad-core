@@ -89,7 +89,6 @@ export class PaymentListComponent {
   viewDetails(row: Payment) {
     this.dialog.open(ViewDetailsComponent, {
       data: row,
-      width: '1000px',
     });
   }
 
