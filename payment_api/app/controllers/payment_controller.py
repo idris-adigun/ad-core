@@ -32,6 +32,12 @@ async def get_payments_controller(keyword: Optional[str] = None, page: int = 1, 
         total_due = due_amount - discount_amount + tax_amount
 
         payment["total_due"] = total_due
+        if payment.get("payee_due_date"):
+            payee_due_date = payment["payee_due_date"]
+            if payee_due_date.date() == datetime.datetime.today().date():
+                payment["payee_payment_status"] = "due_now"
+            elif payee_due_date.date() < datetime.datetime.today().date():
+                payment["payee_payment_status"] = "overdue"
     total_pages = total_payments  # Calculate total number of pages
     return {"payments": payments, "total_pages": total_pages}
 
