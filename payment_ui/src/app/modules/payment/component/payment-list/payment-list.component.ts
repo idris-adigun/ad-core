@@ -82,7 +82,7 @@ export class PaymentListComponent {
     if (pageIndex < 0 || pageIndex >= this.paginator.getNumberOfPages()) {
       return;
     }
-    this.getPayments(pageIndex);
+    this.getPayments(pageIndex + 1);
   }
 
   viewDetails(row: Payment) {
