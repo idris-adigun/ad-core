@@ -32,6 +32,7 @@ export class PaymentListComponent {
   payment_data = new MatTableDataSource<Payment>([]);
   dialog = inject(MatDialog);
   pageSize = 0;
+  filterTimeout: any;
   displayedColumns: string[] = [
     'payee_first_name',
     'payee_last_name',
@@ -41,6 +42,7 @@ export class PaymentListComponent {
     'payee_payment_status',
     'action',
   ];
+  keyword = '';
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -57,15 +59,19 @@ export class PaymentListComponent {
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
-    this.payment_data.filter = filterValue.trim().toLowerCase();
+    // this.payment_data.filter = filterValue.trim().toLowerCase();
+    clearTimeout(this.filterTimeout);
+    this.filterTimeout = setTimeout(() => {
+      this.getPayments(filterValue, 1);
+    }, 1000);
 
     if (this.payment_data.paginator) {
       this.payment_data.paginator.firstPage();
     }
   }
 
-  getPayments(currentPage: number = 1) {
-    this.paymentService.get_payments(null, currentPage, 10).subscribe(
+  getPayments(keyword: string = '', currentPage: number = 1) {
+    this.paymentService.get_payments(keyword, currentPage, 10).subscribe(
       (data: any) => {
         const paymentData = data?.payments as Payment[];
         const totalPages = data?.total_pages;
@@ -114,7 +120,7 @@ export class PaymentListComponent {
         this.paymentService.uploadEvidence(row._id, file).subscribe(
           (response) => {
             this.utilService.show('Evidence uploaded successfully', 'Close');
-            this.getPayments(this.paginator.pageIndex + 1);
+            this.getPayments('', this.paginator.pageIndex + 1);
           },
           (error) => {
             this.utilService.show(`Error ${error?.message}`, 'Close');
@@ -133,7 +139,7 @@ export class PaymentListComponent {
         if (data.success) {
           // show Alert
           this.utilService.show('Payment Deleted Successfully', 'Close');
-          this.getPayments(this.paginator.pageIndex + 1);
+          this.getPayments('', this.paginator.pageIndex + 1);
         }
       },
       (error) => {
@@ -148,7 +154,7 @@ export class PaymentListComponent {
         if (data) {
           // show Alert
           this.utilService.show('Database Reset Successfully', 'Close');
-          this.getPayments(1);
+          this.getPayments('', 1);
         }
       },
       (error) => {
@@ -163,7 +169,7 @@ export class PaymentListComponent {
         if (data) {
           // show Alert
           this.utilService.show('Database Reset Successfully', 'Close');
-          this.getPayments(1);
+          this.getPayments('', 1);
         }
       },
       (error) => {

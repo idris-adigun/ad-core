@@ -18,8 +18,8 @@ from app.controllers.payment_controller import get_payments_controller, create_p
 router = APIRouter()
 
 @router.get("/get-payments/")
-async def get_payments(status: Optional[str] = None, page: int = 1, limit: int = 10):
-    payments = await get_payments_controller(status, page, limit)
+async def get_payments(keyword: Optional[str] = None, page: int = 1, limit: int = 10):
+    payments = await get_payments_controller(keyword, page, limit)
     return payments
 
 @router.post("/create-payment/")

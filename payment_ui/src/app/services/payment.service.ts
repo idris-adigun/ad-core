@@ -8,9 +8,9 @@ export class PaymentService {
   base_url = 'http://localhost:8000';
   constructor(private http: HttpClient) {}
 
-  get_payments(status: string | null, page: number, limit: number) {
+  get_payments(keyword: string | null, page: number, limit: number) {
     const params: { [param: string]: string } = {
-      status: status || '',
+      keyword: keyword || '',
       page: page.toString(),
       limit: limit.toString(),
     };
