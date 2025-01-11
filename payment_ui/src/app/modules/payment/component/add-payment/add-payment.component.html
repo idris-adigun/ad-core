@@ -1,4 +1,7 @@
 <div class="payment-details">
+  <div *ngIf="!isLoaded">
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  </div>
   <h2 mat-dialog-title>Add Payment</h2>
   <mat-dialog-content class="mat-typography">
     <form [formGroup]="paymentForm" class="payment-form">
@@ -29,7 +32,14 @@
 
       <mat-form-field appearance="outline">
         <mat-label>Country</mat-label>
-        <input matInput formControlName="payee_country" required />
+        <mat-select formControlName="payee_country" required>
+          <mat-option
+            *ngFor="let country of countries"
+            [value]="country?.name?.common"
+          >
+            {{ country?.name?.common }}
+          </mat-option>
+        </mat-select>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
@@ -49,12 +59,17 @@
 
       <mat-form-field appearance="outline">
         <mat-label>Discount Percent</mat-label>
-        <input matInput formControlName="discount_percent" required />
+        <input
+          matInput
+          formControlName="discount_percent"
+          type="number"
+          required
+        />
       </mat-form-field>
 
       <mat-form-field appearance="outline">
         <mat-label>Due Amount</mat-label>
-        <input matInput formControlName="due_amount" required />
+        <input matInput formControlName="due_amount" type="number" required />
       </mat-form-field>
 
       <mat-form-field appearance="outline">
@@ -64,6 +79,8 @@
           [matDatepicker]="addedDatePicker"
           formControlName="payee_added_date_utc"
           required
+          (focus)="addedDatePicker.open()"
+          [max]="maxDate"
         />
         <mat-datepicker-toggle
           matSuffix
@@ -78,6 +95,8 @@
           matInput
           [matDatepicker]="dueDatePicker"
           formControlName="payee_due_date"
+          (focus)="dueDatePicker.open()"
+          [min]="maxDate"
           required
         />
         <mat-datepicker-toggle
@@ -89,7 +108,11 @@
 
       <mat-form-field appearance="outline">
         <mat-label>Payment Status</mat-label>
-        <input matInput formControlName="payee_payment_status" required />
+        <mat-select formControlName="payee_payment_status" required>
+          <mat-option *ngFor="let status of payment_status" [value]="status">
+            {{ status }}
+          </mat-option>
+        </mat-select>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
@@ -104,7 +127,7 @@
 
       <mat-form-field appearance="outline">
         <mat-label>Tax Percent</mat-label>
-        <input matInput formControlName="tax_percent" required />
+        <input matInput formControlName="tax_percent" type="number" required />
       </mat-form-field>
 
       <button mat-button type="submit" [disabled]="!paymentForm.valid">

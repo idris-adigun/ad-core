@@ -13,18 +13,20 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { BrowserModule } from '@angular/platform-browser';
-import {
-  MatFormField,
-  MatFormFieldControl,
-  MatFormFieldModule,
-} from '@angular/material/form-field';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import {
   MatNativeDateModule,
   provideNativeDateAdapter,
 } from '@angular/material/core';
-
+import { LocationService } from '../../../../services/location.service';
+import { MatSelectModule } from '@angular/material/select';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+export interface Countries {
+  name: any;
+  currency: any;
+  timezones: any;
+}
 @Component({
   selector: 'app-add-payment',
   imports: [
@@ -39,13 +41,19 @@ import {
     MatInputModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatSelectModule,
+    MatProgressBarModule,
   ],
   providers: [provideNativeDateAdapter()],
   templateUrl: './add-payment.component.html',
   styleUrl: './add-payment.component.css',
 })
 export class AddPaymentComponent {
+  isLoaded = false;
   payment = {} as Payment;
+  countries = [] as Countries[];
+
+  payment_status = ['pending', 'overdue'];
 
   paymentForm = new FormGroup({
     payee_first_name: new FormControl('', [Validators.required]),
@@ -62,10 +70,31 @@ export class AddPaymentComponent {
     payee_added_date_utc: new FormControl(0, [Validators.required]),
     payee_due_date: new FormControl('', [Validators.required]),
     payee_payment_status: new FormControl('', [Validators.required]),
-    payee_phone_number: new FormControl(0, [Validators.required]),
+    payee_phone_number: new FormControl('', [Validators.required]),
     payee_province_or_state: new FormControl('', [Validators.required]),
     tax_percent: new FormControl(0, [Validators.required]),
   });
 
-  constructor() {}
+  readonly maxDate = new Date();
+  constructor(private locationService: LocationService) {
+    this.get_all_locations();
+  }
+
+  get_all_locations() {
+    this.isLoaded = false;
+    this.paymentForm.disable();
+    this.locationService.get_locations().subscribe((data: any) => {
+      if (data.length > 0) {
+        let mappedData = data.map((item: any) => {
+          return {
+            name: item.name,
+            timezones: item.timezones,
+          };
+        });
+        this.countries = mappedData;
+        this.isLoaded = true;
+        this.paymentForm.enable();
+      }
+    });
+  }
 }
