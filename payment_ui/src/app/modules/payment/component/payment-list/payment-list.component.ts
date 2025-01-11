@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, inject, ViewChild } from '@angular/core';
 import { PaymentService } from '../../../../services/payment.service';
 import { Payment } from '../../../../models/payment';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -9,6 +9,13 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { UtilService } from '../../../../services/util.service';
+import {
+  MatDialog,
+  MAT_DIALOG_DATA,
+  MatDialogTitle,
+  MatDialogContent,
+} from '@angular/material/dialog';
+import { ViewDetailsComponent } from '../view-details/view-details.component';
 @Component({
   selector: 'app-payment-list',
   imports: [
@@ -26,6 +33,7 @@ import { UtilService } from '../../../../services/util.service';
 })
 export class PaymentListComponent {
   payment_data = new MatTableDataSource<Payment>([]);
+  dialog = inject(MatDialog);
   pageSize = 0;
   displayedColumns: string[] = [
     'payee_first_name',
@@ -79,7 +87,10 @@ export class PaymentListComponent {
   }
 
   viewDetails(row: Payment) {
-    console.log(row);
+    this.dialog.open(ViewDetailsComponent, {
+      data: row,
+      width: '1000px',
+    });
   }
 
   editDetails(row: Payment) {
@@ -96,12 +107,17 @@ export class PaymentListComponent {
 
   deletePayment(row: Payment) {
     let payment_id = row._id;
-    this.paymentService.delete_payment(payment_id).subscribe((data: any) => {
-      if (data.success) {
-        // show Alert
-        this.utilService.show('Payment Deleted Successfully', 'Close');
-        this.getPayments(this.paginator.pageIndex + 1);
+    this.paymentService.delete_payment(payment_id).subscribe(
+      (data: any) => {
+        if (data.success) {
+          // show Alert
+          this.utilService.show('Payment Deleted Successfully', 'Close');
+          this.getPayments(this.paginator.pageIndex + 1);
+        }
+      },
+      (error) => {
+        this.utilService.show('Error Deleting Payment', 'Close');
       }
-    });
+    );
   }
 }

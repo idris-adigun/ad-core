@@ -1,0 +1,49 @@
+<div class="payment-details">
+  <h2 mat-dialog-title>Payment Details</h2>
+  <mat-dialog-content class="mat-typography">
+    <div class="payee-info">
+      <div>
+        <span class="section">Name: </span>{{ payment?.payee_first_name }}
+        {{ payment?.payee_last_name }}
+      </div>
+      <div><span class="section">Email: </span>{{ payment?.payee_email }}</div>
+      <div>
+        <span class="section">Phone Number: </span
+        >{{ payment?.payee_phone_number }}
+      </div>
+      <div>
+        <span class="section">Address: </span
+        >{{ payment?.payee_address_line_1 }}
+        {{ payment?.payee_address_line_2 }}, {{ payment?.payee_city }},
+        {{ payment?.payee_country }},
+        {{ payment?.payee_postal_code }}
+      </div>
+      <div>
+        <span class="section">Date Added: </span
+        >{{ payment?.payee_added_date_utc }}
+      </div>
+      <div>
+        <span class="section">Total Due: </span>{{ payment?.currency }}
+        {{ payment?.total_due }}
+      </div>
+      <div>
+        <span class="section">Due Date: </span>{{ payment?.payee_due_date }}
+      </div>
+      <div>
+        <span class="section">Payment Status: </span
+        >{{ payment?.payee_payment_status }}
+      </div>
+      <div>
+        <span class="section">Evidence: </span>
+        <ng-container
+          *ngIf="payment?.evidence_url?.length > 0; else noEvidence"
+        >
+          <a [href]="payment?.evidence_url" target="_blank"
+            >Download Evidence</a
+          >
+        </ng-container>
+        <ng-template #noEvidence>No Evidence provided</ng-template>
+      </div>
+    </div></mat-dialog-content
+  >
+</div>
