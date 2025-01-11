@@ -1,5 +1,7 @@
 <div class="header">
-  <button mat-flat-button color="primary">Add Payment</button>
+  <button mat-flat-button color="primary" (click)="addPayment()">
+    Add Payment
+  </button>
   <div class="db-actions">
     <button mat-stroked-button (click)="resetDatabase()">
       Reset All Payments

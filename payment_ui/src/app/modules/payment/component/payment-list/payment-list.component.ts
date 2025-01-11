@@ -11,6 +11,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { UtilService } from '../../../../services/util.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ViewDetailsComponent } from '../view-details/view-details.component';
+import { AddPaymentComponent } from '../add-payment/add-payment.component';
 @Component({
   selector: 'app-payment-list',
   imports: [
@@ -90,6 +91,10 @@ export class PaymentListComponent {
     });
   }
 
+  addPayment() {
+    this.dialog.open(AddPaymentComponent);
+  }
+
   editDetails(row: Payment) {
     console.log(row);
   }
@@ -140,8 +145,6 @@ export class PaymentListComponent {
           // show Alert
           this.utilService.show('Database Reset Successfully', 'Close');
           this.getPayments(1);
-          // reste the paginator
-          this.paginator.firstPage();
         }
       },
       (error) => {
