@@ -25,7 +25,7 @@ async def get_payments_controller(status: Optional[str] = None, page: int = 1, l
         total_due = due_amount - discount_amount + tax_amount
 
         payment["total_due"] = total_due
-    total_pages = (total_payments + limit - 1) // limit  # Calculate total number of pages
+    total_pages = total_payments  # Calculate total number of pages
     return {"payments": payments, "total_pages": total_pages}
 
 
