@@ -4,7 +4,7 @@ This repository contains the Docker setup for the Adcore Payment System, includi
 
 ## Prerequisites
 
-- Docker
+- Docker [Install Docker](https://docs.docker.com/get-docker/)
 - Docker Compose
 
 ## Services

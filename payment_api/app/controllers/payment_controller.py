@@ -17,7 +17,7 @@ async def get_payments_controller(keyword: Optional[str] = None, page: int = 1, 
             {"payee_email": {"$regex": keyword, "$options": "i"}}
         ]}
 
-    total_payments = payments_collection.count_documents(query)
+    total_payments = payments_collection.count_documents(query) / limit
     payments =  payments_collection.find(query).skip(skip).limit(limit).to_list(length=limit)
     for payment in payments:
         payment["_id"] = str(payment["_id"])
